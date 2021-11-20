@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component, PureComponent } from 'react'
 import {
   Dropdown,
   Menu,
@@ -13,116 +13,116 @@ import {
   Modal,
   message,
   Tooltip
-} from 'antd';
+} from 'antd'
+import _ from 'underscore'
 import FieldInput from './FieldInput'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { JSONPATH_JOIN_CHAR, SCHEMA_TYPE } from '../../utils'
+import * as utils from '../../utils'
+import LocaleProvider from '../LocalProvider'
+import MockSelect from '../MockSelect'
+import './schemaJson.css'
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { TextArea } = Input;
-import './schemaJson.css';
-import _ from 'underscore';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { JSONPATH_JOIN_CHAR, SCHEMA_TYPE } from '../../utils.js';
-const InputGroup = Input.Group;
-import LocaleProvider from '../LocalProvider/index.js';
-import utils from '../../utils';
-import MockSelect from '../MockSelect/index.js';
+const FormItem = Form.Item
+const Option = Select.Option
+const { TextArea } = Input
+const InputGroup = Input.Group
 
 const mapping = (name, data, showEdit, showAdv) => {
   switch (data.type) {
     case 'array':
-      return <SchemaArray prefix={name} data={data} showEdit={showEdit} showAdv={showAdv} />;
-      break;
+      return <SchemaArray prefix={name} data={data} showEdit={showEdit} showAdv={showAdv} />
+      break
     case 'object':
-      let nameArray = [].concat(name, 'properties');
-      return <SchemaObject prefix={nameArray} data={data} showEdit={showEdit} showAdv={showAdv} />;
-      break;
+      let nameArray = [].concat(name, 'properties')
+      return <SchemaObject prefix={nameArray} data={data} showEdit={showEdit} showAdv={showAdv} />
+      break
     default:
-      return null;
+      return null
   }
-};
+}
 
 class SchemaArray extends PureComponent {
   constructor(props, context) {
-    super(props);
-    this._tagPaddingLeftStyle = {};
-    this.Model = context.Model.schema;
+    super(props)
+    this._tagPaddingLeftStyle = {}
+    this.Model = context.Model.schema
   }
 
   componentWillMount() {
-    const { prefix } = this.props;
-    let length = prefix.filter(name => name != 'properties').length;
+    const { prefix } = this.props
+    let length = prefix.filter(name => name != 'properties').length
     this.__tagPaddingLeftStyle = {
       paddingLeft: `${20 * (length + 1)}px`
-    };
+    }
   }
 
   getPrefix() {
-    return [].concat(this.props.prefix, 'items');
+    return [].concat(this.props.prefix, 'items')
   }
 
   // 修改数据类型
   handleChangeType = value => {
-    let prefix = this.getPrefix();
-    let key = [].concat(prefix, 'type');
-    this.Model.changeTypeAction({ key, value });
-  };
+    let prefix = this.getPrefix()
+    let key = [].concat(prefix, 'type')
+    this.Model.changeTypeAction({ key, value })
+  }
 
   // 修改备注信息
   handleChangeDesc = e => {
-    let prefix = this.getPrefix();
-    let key = [].concat(prefix, `description`);
-    let value = e.target.value;
-    this.Model.changeValueAction({ key, value });
-  };
+    let prefix = this.getPrefix()
+    let key = [].concat(prefix, `description`)
+    let value = e.target.value
+    this.Model.changeValueAction({ key, value })
+  }
 
   // 修改mock信息
   handleChangeMock = e => {
-    let prefix = this.getPrefix();
-    let key = [].concat(prefix, `mock`);
-    let value = e ? { mock: e } : '';
-    this.Model.changeValueAction({ key, value });
-  };
+    let prefix = this.getPrefix()
+    let key = [].concat(prefix, `mock`)
+    let value = e ? { mock: e } : ''
+    this.Model.changeValueAction({ key, value })
+  }
 
   handleChangeTitle = e =>{
-    let prefix = this.getPrefix();
-    let key = [].concat(prefix, `title`);
-    let value = e.target.value;
-    this.Model.changeValueAction({ key, value });
+    let prefix = this.getPrefix()
+    let key = [].concat(prefix, `title`)
+    let value = e.target.value
+    this.Model.changeValueAction({ key, value })
   }
 
   // 增加子节点
   handleAddChildField = () => {
-    let prefix = this.getPrefix();
-    let keyArr = [].concat(prefix, 'properties');
-    this.Model.addChildFieldAction({ key: keyArr });
-    this.Model.setOpenValueAction({ key: keyArr, value: true });
-  };
+    let prefix = this.getPrefix()
+    let keyArr = [].concat(prefix, 'properties')
+    this.Model.addChildFieldAction({ key: keyArr })
+    this.Model.setOpenValueAction({ key: keyArr, value: true })
+  }
 
   handleClickIcon = () => {
-    let prefix = this.getPrefix();
+    let prefix = this.getPrefix()
     // 数据存储在 properties.name.properties下
-    let keyArr = [].concat(prefix, 'properties');
-    this.Model.setOpenValueAction({ key: keyArr });
-  };
+    let keyArr = [].concat(prefix, 'properties')
+    this.Model.setOpenValueAction({ key: keyArr })
+  }
 
   handleShowEdit = (name, type) => {
-    let prefix = this.getPrefix();
-    this.props.showEdit(prefix, name, this.props.data.items[name], type);
-  };
+    let prefix = this.getPrefix()
+    this.props.showEdit(prefix, name, this.props.data.items[name], type)
+  }
 
   handleShowAdv = () => {
-    this.props.showAdv(this.getPrefix(), this.props.data.items);
-  };
+    this.props.showAdv(this.getPrefix(), this.props.data.items)
+  }
 
   render() {
-    const { data, prefix, showEdit, showAdv } = this.props;
-    const items = data.items;
-    let prefixArray = [].concat(prefix, 'items');
+    const { data, prefix, showEdit, showAdv } = this.props
+    const items = data.items
+    let prefixArray = [].concat(prefix, 'items')
 
-    let prefixArrayStr = [].concat(prefixArray, 'properties').join(JSONPATH_JOIN_CHAR);
-    let showIcon = this.context.getOpenValue([prefixArrayStr]);
+    let prefixArrayStr = [].concat(prefixArray, 'properties').join(JSONPATH_JOIN_CHAR)
+    let showIcon = this.context.getOpenValue([prefixArrayStr])
     return (
       !_.isUndefined(data.items) && (
         <div className="array-type">
@@ -161,7 +161,7 @@ class SchemaArray extends PureComponent {
                     <Option value={item} key={index}>
                       {item}
                     </Option>
-                  );
+                  )
                 })}
               </Select>
             </Col>
@@ -210,7 +210,7 @@ class SchemaArray extends PureComponent {
           <div className="option-formStyle">{mapping(prefixArray, items, showEdit, showAdv)}</div>
         </div>
       )
-    );
+    )
   }
 }
 
@@ -218,125 +218,125 @@ SchemaArray.contextTypes = {
   getOpenValue: PropTypes.func,
   Model: PropTypes.object,
   isMock: PropTypes.bool
-};
+}
 
 class SchemaItem extends PureComponent {
   constructor(props, context) {
-    super(props);
-    this._tagPaddingLeftStyle = {};
+    super(props)
+    this._tagPaddingLeftStyle = {}
     // this.num = 0
-    this.Model = context.Model.schema;
+    this.Model = context.Model.schema
   }
 
   componentWillMount() {
-    const { prefix } = this.props;
-    let length = prefix.filter(name => name != 'properties').length;
+    const { prefix } = this.props
+    let length = prefix.filter(name => name != 'properties').length
     this.__tagPaddingLeftStyle = {
       paddingLeft: `${20 * (length + 1)}px`
-    };
+    }
   }
 
   getPrefix() {
-    return [].concat(this.props.prefix, this.props.name);
+    return [].concat(this.props.prefix, this.props.name)
   }
 
   // 修改节点字段名
   handleChangeName = e => {
-    const { data, prefix, name } = this.props;
-    let value = e.target.value;
+    const { data, prefix, name } = this.props
+    let value = e.target.value
 
     if (data.properties[value] && typeof data.properties[value] === 'object') {
-      return message.error(`The field "${value}" already exists.`);
+      return message.error(`The field "${value}" already exists.`)
     }
 
-    this.Model.changeNameAction({ value, prefix, name });
-  };
+    this.Model.changeNameAction({ value, prefix, name })
+  }
 
   // 修改备注信息
   handleChangeDesc = e => {
-    let prefix = this.getPrefix();
-    let key = [].concat(prefix, 'description');
-    let value = e.target.value;
-    this.Model.changeValueAction({ key, value });
-  };
+    let prefix = this.getPrefix()
+    let key = [].concat(prefix, 'description')
+    let value = e.target.value
+    this.Model.changeValueAction({ key, value })
+  }
 
   // 修改mock 信息
   handleChangeMock = e => {
-    let prefix = this.getPrefix();
-    let key = [].concat(prefix, `mock`);
-    let value = e ? { mock: e } : '';
-    this.Model.changeValueAction({ key, value });
-  };
+    let prefix = this.getPrefix()
+    let key = [].concat(prefix, `mock`)
+    let value = e ? { mock: e } : ''
+    this.Model.changeValueAction({ key, value })
+  }
 
   handleChangeTitle = e => {
-    let prefix = this.getPrefix();
-    let key = [].concat(prefix, `title`);
-    let value = e.target.value;
-    this.Model.changeValueAction({ key, value });
+    let prefix = this.getPrefix()
+    let key = [].concat(prefix, `title`)
+    let value = e.target.value
+    this.Model.changeValueAction({ key, value })
   }
 
   // 修改数据类型
   handleChangeType = e => {
-    let prefix = this.getPrefix();
-    let key = [].concat(prefix, 'type');
-    this.Model.changeTypeAction({ key, value: e });
-  };
+    let prefix = this.getPrefix()
+    let key = [].concat(prefix, 'type')
+    this.Model.changeTypeAction({ key, value: e })
+  }
 
   // 删除节点
   handleDeleteItem = () => {
-    const { prefix, name } = this.props;
-    let nameArray = this.getPrefix();
-    this.Model.deleteItemAction({ key: nameArray });
-    this.Model.enableRequireAction({ prefix, name, required: false });
-  };
+    const { prefix, name } = this.props
+    let nameArray = this.getPrefix()
+    this.Model.deleteItemAction({ key: nameArray })
+    this.Model.enableRequireAction({ prefix, name, required: false })
+  }
   /*
   展示备注编辑弹窗
   editorName: 弹窗名称 ['description', 'mock']
   type: 如果当前字段是object || array showEdit 不可用
   */
   handleShowEdit = (editorName, type) => {
-    const { data, name, showEdit } = this.props;
+    const { data, name, showEdit } = this.props
 
-    showEdit(this.getPrefix(), editorName, data.properties[name][editorName], type);
-  };
+    showEdit(this.getPrefix(), editorName, data.properties[name][editorName], type)
+  }
 
   // 展示高级设置弹窗
   handleShowAdv = () => {
-    const { data, name, showAdv } = this.props;
-    showAdv(this.getPrefix(), data.properties[name]);
-  };
+    const { data, name, showAdv } = this.props
+    showAdv(this.getPrefix(), data.properties[name])
+  }
 
   //  增加子节点
   handleAddField = () => {
-    const { prefix, name } = this.props;
-    this.Model.addFieldAction({ prefix, name });
-  };
+    const { prefix, name } = this.props
+    this.Model.addFieldAction({ prefix, name })
+  }
 
   // 控制三角形按钮
   handleClickIcon = () => {
-    let prefix = this.getPrefix();
+    let prefix = this.getPrefix()
     // 数据存储在 properties.xxx.properties 下
-    let keyArr = [].concat(prefix, 'properties');
-    this.Model.setOpenValueAction({ key: keyArr });
-  };
+    let keyArr = [].concat(prefix, 'properties')
+    this.Model.setOpenValueAction({ key: keyArr })
+  }
 
   // 修改是否必须
   handleEnableRequire = e => {
-    const { prefix, name } = this.props;
-    let required = e.target.checked;
-    // this.enableRequire(this.props.prefix, this.props.name, e.target.checked);
-    this.Model.enableRequireAction({ prefix, name, required });
-  };
+    const { prefix, name } = this.props
+    let required = e.target.checked
+    // this.enableRequire(this.props.prefix, this.props.name, e.target.checked)
+    this.Model.enableRequireAction({ prefix, name, required })
+  }
 
   render() {
-    let { name, data, prefix, showEdit, showAdv } = this.props;
-    let value = data.properties[name];
-    let prefixArray = [].concat(prefix, name);
+    let { name, data, prefix, showEdit, showAdv } = this.props
+    let value = data.properties[name]
+    let prefixArray = [].concat(prefix, name)
 
-    let prefixStr = prefix.join(JSONPATH_JOIN_CHAR);
-    let prefixArrayStr = [].concat(prefixArray, 'properties').join(JSONPATH_JOIN_CHAR);
-    let show = this.context.getOpenValue([prefixStr]);
-    let showIcon = this.context.getOpenValue([prefixArrayStr]);
+    let prefixStr = prefix.join(JSONPATH_JOIN_CHAR)
+    let prefixArrayStr = [].concat(prefixArray, 'properties').join(JSONPATH_JOIN_CHAR)
+    let show = this.context.getOpenValue([prefixStr])
+    let showIcon = this.context.getOpenValue([prefixArrayStr])
     return show ? (
       <div>
         <Row type="flex" justify="space-around" align="middle">
@@ -388,7 +388,7 @@ class SchemaItem extends PureComponent {
                   <Option value={item} key={index}>
                     {item}
                   </Option>
-                );
+                )
               })}
             </Select>
           </Col>
@@ -454,7 +454,7 @@ class SchemaItem extends PureComponent {
         </Row>
         <div className="option-formStyle">{mapping(prefixArray, value, showEdit, showAdv)}</div>
       </div>
-    ) : null;
+    ) : null
   }
 }
 
@@ -462,7 +462,7 @@ SchemaItem.contextTypes = {
   getOpenValue: PropTypes.func,
   Model: PropTypes.object,
   isMock: PropTypes.bool
-};
+}
 
 class SchemaObjectComponent extends Component {
   shouldComponentUpdate(nextProps) {
@@ -471,13 +471,13 @@ class SchemaObjectComponent extends Component {
       _.isEqual(nextProps.prefix, this.props.prefix) &&
       _.isEqual(nextProps.open, this.props.open)
     ) {
-      return false;
+      return false
     }
-    return true;
+    return true
   }
 
   render() {
-    const { data, prefix, showEdit, showAdv } = this.props;
+    const { data, prefix, showEdit, showAdv } = this.props
     return (
       <div className="object-style">
         {Object.keys(data.properties).map((name, index) => (
@@ -491,17 +491,17 @@ class SchemaObjectComponent extends Component {
           />
         ))}
       </div>
-    );
+    )
   }
 }
 
 const SchemaObject = connect(state => ({
   open: state.schema.open
-}))(SchemaObjectComponent);
+}))(SchemaObjectComponent)
 
 const DropPlus = (props, context) => {
-  const { prefix, name, add } = props;
-  const Model = context.Model.schema;
+  const { prefix, name, add } = props
+  const Model = context.Model.schema
   const menu = (
     <Menu>
       <Menu.Item>
@@ -512,15 +512,15 @@ const DropPlus = (props, context) => {
       <Menu.Item>
         <span
           onClick={() => {
-            Model.setOpenValueAction({ key: [].concat(prefix, name, 'properties'), value: true });
-            Model.addChildFieldAction({ key: [].concat(prefix, name, 'properties') });
+            Model.setOpenValueAction({ key: [].concat(prefix, name, 'properties'), value: true })
+            Model.addChildFieldAction({ key: [].concat(prefix, name, 'properties') })
           }}
         >
           {LocaleProvider('child_node')}
         </span>
       </Menu.Item>
     </Menu>
-  );
+  )
 
   return (
     <Tooltip placement="top" title={LocaleProvider('add_node')}>
@@ -528,16 +528,16 @@ const DropPlus = (props, context) => {
         <Icon type="plus" className="plus" />
       </Dropdown>
     </Tooltip>
-  );
-};
+  )
+}
 
 DropPlus.contextTypes = {
   Model: PropTypes.object
-};
+}
 
 const SchemaJson = props => {
-  const item = mapping([], props.data, props.showEdit, props.showAdv);
-  return <div className="schema-content">{item}</div>;
-};
+  const item = mapping([], props.data, props.showEdit, props.showAdv)
+  return <div className="schema-content">{item}</div>
+}
 
-export default SchemaJson;
+export default SchemaJson

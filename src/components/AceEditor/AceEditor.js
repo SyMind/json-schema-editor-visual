@@ -1,7 +1,7 @@
-import React from 'react';
-import mockEditor from './mockEditor';
-import PropTypes from 'prop-types';
-import _ from 'underscore';
+import React from 'react'
+import PropTypes from 'prop-types'
+import _ from 'underscore'
+import mockEditor from './mockEditor'
 
 const ModeMap = {
   javascript: 'ace/mode/javascript',
@@ -9,25 +9,25 @@ const ModeMap = {
   text: 'ace/mode/text',
   xml: 'ace/mode/xml',
   html: 'ace/mode/html'
-};
+}
 
 function isNotMatch(a, b) {
   try {
-    a = JSON.parse(a);
-    b = JSON.parse(b);
-    return !_.isEqual(a, b);
+    a = JSON.parse(a)
+    b = JSON.parse(b)
+    return !_.isEqual(a, b)
   } catch (e) {
-    return true;
+    return true
   }
 }
 
 function getMode(mode) {
-  return ModeMap[mode] || ModeMap.text;
+  return ModeMap[mode] || ModeMap.text
 }
 
 class AceEditor extends React.PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   componentDidMount() {
@@ -37,27 +37,27 @@ class AceEditor extends React.PureComponent {
       onChange: this.props.onChange,
       readOnly: this.props.readOnly,
       fullScreen: this.props.fullScreen
-    });
+    })
 
-    let mode = this.props.mode || 'javascript';
-    this.editor.editor.getSession().setMode(getMode(mode));
+    let mode = this.props.mode || 'javascript'
+    this.editor.editor.getSession().setMode(getMode(mode))
     if (typeof this.props.callback === 'function') {
-      this.props.callback(this.editor.editor);
+      this.props.callback(this.editor.editor)
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.editor) return;
+    if (!this.editor) return
 
     if (
       isNotMatch(nextProps.data, this.props.data) &&
       isNotMatch(this.editor.getValue(), nextProps.data)
     ) {
-      this.editor.setValue(nextProps.data);
+      this.editor.setValue(nextProps.data)
 
-      let mode = nextProps.mode || 'javascript';
-      this.editor.editor.getSession().setMode(getMode(mode));
-      this.editor.editor.clearSelection();
+      let mode = nextProps.mode || 'javascript'
+      this.editor.editor.getSession().setMode(getMode(mode))
+      this.editor.editor.clearSelection()
     }
   }
 
@@ -69,10 +69,10 @@ class AceEditor extends React.PureComponent {
           this.props.className ? undefined : this.props.style || { width: '100%', height: '200px' }
         }
         ref={editor => {
-          this.editorElement = editor;
+          this.editorElement = editor
         }}
       />
-    );
+    )
   }
 }
 
@@ -86,6 +86,6 @@ AceEditor.propTypes = {
   style: PropTypes.object,
   fullScreen: PropTypes.bool,
   insertCode: PropTypes.func
-};
+}
 
-export default AceEditor;
+export default AceEditor

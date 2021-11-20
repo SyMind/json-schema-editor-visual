@@ -1,13 +1,19 @@
 {
-  "name": "json-schema-editor-visual",
-  "version": "1.1.1",
+  "name": "@sharp/json-schema-editor-visual",
+  "version": "0.0.1",
   "description": "json schema editor",
-  "main": "package/index.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "dist/json-schema-editor-visual.min.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "es"
+  ],
   "license": "MIT",
   "scripts": {
-    "start": "react-scripts start",
-    "demo": "NODE_ENV=production ykit pack -m",
-    "build": "NODE_ENV=production webpack"
+    "build": "gulp build"
   },
   "dependencies": {
     "antd": "^3.1.6",
@@ -15,13 +21,19 @@
     "generate-schema": "^2.6.0",
     "moox": "^1.0.2",
     "react-redux": "^5.0.6",
+    "redux": "^4.1.2",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/plugin-transform-typescript": "^7.16.1",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
-    "autoprefixer": "^7.2.1",
-    "cross-env": "^5.1.1"
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "merge2": "^1.4.1",
+    "typescript": "^4.5.2"
   }
 }
