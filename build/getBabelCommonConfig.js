@@ -1,4 +1,4 @@
-const resolve = require.resolve;
+const resolve = require.resolve
 
 module.exports = useESModules => {
     const plugins = [
@@ -15,7 +15,7 @@ module.exports = useESModules => {
                 version: '^7.10.4'
             }
         ]
-    ];
+    ]
 
     return {
         presets: [
@@ -31,5 +31,5 @@ module.exports = useESModules => {
             ]
         ],
         plugins
-    };
-};
+    }
+}

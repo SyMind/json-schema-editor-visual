@@ -4,11 +4,11 @@ import { Provider } from 'react-redux'
 import PropTypes from 'prop-types'
 import moox from 'moox'
 import App from './App'
-import * as utils from './utils'
+import utils from './utils'
 import schema from './models/schema'
 
 function createJSONSchemaEditor(config = {}) {
-  // if(config.lang) utils.lang = config.lang
+  if(config.lang) utils.lang = config.lang
 
   const Model = moox({
     schema

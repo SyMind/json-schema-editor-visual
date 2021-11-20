@@ -1,4 +1,4 @@
-import * as utils from '../../utils'
+import utils from '../../utils'
 import React from 'react';
 
 const langs = {

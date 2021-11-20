@@ -20,9 +20,8 @@ import _ from 'underscore'
 import { connect } from 'react-redux'
 import AceEditor from './components/AceEditor/AceEditor'
 import SchemaJson from './components/SchemaComponents/SchemaJson'
-import { SCHEMA_TYPE, debounce } from './utils'
+import utils from './utils'
 import handleSchema from './schema'
-import * as utils from './utils'
 import CustomItem from './components/SchemaComponents/SchemaOther'
 import LocalProvider from './components/LocalProvider'
 import MockSelect from './components/MockSelect'
@@ -36,7 +35,6 @@ const TabPane = Tabs.TabPane
 class jsonSchema extends React.Component {
   constructor(props) {
     super(props)
-    this.alterMsg = debounce(this.alterMsg, 2000)
     this.state = {
       visible: false,
       show: true,
@@ -53,6 +51,8 @@ class jsonSchema extends React.Component {
     this.Model = this.props.Model.schema
     this.jsonSchemaData = null
     this.jsonData = null
+
+    this.alterMsg = _.debounce(this.alterMsg, 2000)
   }
 
   // json 导入弹窗
@@ -312,7 +312,7 @@ class jsonSchema extends React.Component {
           title={
             <div>
               {LocalProvider(editorModalName)}
-              &nbsp
+              &nbsp;
               {editorModalName === 'mock' && (
                 <Tooltip title={LocalProvider('mockLink')}>
                   <a
@@ -406,7 +406,7 @@ class jsonSchema extends React.Component {
                   onChange={e => this.changeType(`type`, e)}
                   value={schema.type || 'object'}
                 >
-                  {SCHEMA_TYPE.map((item, index) => {
+                  {utils.SCHEMA_TYPE.map((item, index) => {
                     return (
                       <Option value={item} key={index}>
                         {item}

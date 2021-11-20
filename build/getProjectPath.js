@@ -1,9 +1,9 @@
-const path = require('path');
+const path = require('path')
 
-const cwd = process.cwd();
+const cwd = process.cwd()
 
 function getProjectPath(...filePath) {
-    return path.join(cwd, ...filePath);
+    return path.join(cwd, ...filePath)
 }
 
-module.exports = getProjectPath;
+module.exports = getProjectPath

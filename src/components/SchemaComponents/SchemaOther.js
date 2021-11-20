@@ -19,7 +19,6 @@ import {
 import _ from 'underscore'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { JSONPATH_JOIN_CHAR, SCHEMA_TYPE } from '../../utils'
 import AceEditor from '../AceEditor/AceEditor'
 import LocalProvider from '../LocalProvider'
 import './schemaJson.css'
@@ -130,11 +129,11 @@ class SchemaString extends PureComponent {
         <Row className="other-row" type="flex" align="middle">
           <Col span={4} className="other-label">
             <span>
-              Pattern&nbsp
+              Pattern&nbsp;
               <Tooltip title={LocalProvider('pattern')}>
                 <Icon type="question-circle-o" style={{ width: '10px' }} />
               </Tooltip>
-              &nbsp :
+              &nbsp; :
             </span>
           </Col>
           <Col span={20}>
@@ -299,11 +298,11 @@ class SchemaNumber extends PureComponent {
             <Row type="flex" align="middle">
               <Col span={13} className="other-label">
                 <span>
-                  exclusiveMinimum&nbsp
+                  exclusiveMinimum&nbsp;
                   <Tooltip title={LocalProvider('exclusiveMinimum')}>
                     <Icon type="question-circle-o" style={{ width: '10px' }} />
                   </Tooltip>
-                  &nbsp :
+                  &nbsp; :
                 </span>
               </Col>
               <Col span={11}>
@@ -321,11 +320,11 @@ class SchemaNumber extends PureComponent {
             <Row type="flex" align="middle">
               <Col span={13} className="other-label">
                 <span>
-                  exclusiveMaximum&nbsp
+                  exclusiveMaximum&nbsp;
                   <Tooltip title={LocalProvider('exclusiveMaximum')}>
                     <Icon type="question-circle-o" style={{ width: '10px' }} />
                   </Tooltip>
-                  &nbsp :
+                  &nbsp; :
                 </span>
               </Col>
               <Col span={11}>
@@ -469,11 +468,11 @@ const SchemaArray = (props, context) => {
       <Row className="other-row" type="flex" align="middle">
         <Col span={6} className="other-label">
           <span>
-            uniqueItems&nbsp
+            uniqueItems&nbsp;
             <Tooltip title={LocalProvider('unique_items')}>
               <Icon type="question-circle-o" style={{ width: '10px' }} />
             </Tooltip>
-            &nbsp :
+            &nbsp; :
           </span>
         </Col>
         <Col span={18}>

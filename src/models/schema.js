@@ -1,5 +1,5 @@
 import _ from 'underscore'
-import * as utils from '../utils'
+import utils from '../utils'
 import handleSchema from '../schema'
 
 let fieldNum = 1

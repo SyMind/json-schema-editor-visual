@@ -18,8 +18,7 @@ import _ from 'underscore'
 import FieldInput from './FieldInput'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { JSONPATH_JOIN_CHAR, SCHEMA_TYPE } from '../../utils'
-import * as utils from '../../utils'
+import utils from '../../utils'
 import LocaleProvider from '../LocalProvider'
 import MockSelect from '../MockSelect'
 import './schemaJson.css'
@@ -121,7 +120,7 @@ class SchemaArray extends PureComponent {
     const items = data.items
     let prefixArray = [].concat(prefix, 'items')
 
-    let prefixArrayStr = [].concat(prefixArray, 'properties').join(JSONPATH_JOIN_CHAR)
+    let prefixArrayStr = [].concat(prefixArray, 'properties').join(utils.JSONPATH_JOIN_CHAR)
     let showIcon = this.context.getOpenValue([prefixArrayStr])
     return (
       !_.isUndefined(data.items) && (
@@ -156,7 +155,7 @@ class SchemaArray extends PureComponent {
                 onChange={this.handleChangeType}
                 value={items.type}
               >
-                {SCHEMA_TYPE.map((item, index) => {
+                {utils.SCHEMA_TYPE.map((item, index) => {
                   return (
                     <Option value={item} key={index}>
                       {item}
@@ -333,8 +332,8 @@ class SchemaItem extends PureComponent {
     let value = data.properties[name]
     let prefixArray = [].concat(prefix, name)
 
-    let prefixStr = prefix.join(JSONPATH_JOIN_CHAR)
-    let prefixArrayStr = [].concat(prefixArray, 'properties').join(JSONPATH_JOIN_CHAR)
+    let prefixStr = prefix.join(utils.JSONPATH_JOIN_CHAR)
+    let prefixArrayStr = [].concat(prefixArray, 'properties').join(utils.JSONPATH_JOIN_CHAR)
     let show = this.context.getOpenValue([prefixStr])
     let showIcon = this.context.getOpenValue([prefixArrayStr])
     return show ? (
@@ -383,7 +382,7 @@ class SchemaItem extends PureComponent {
               onChange={this.handleChangeType}
               value={value.type}
             >
-              {SCHEMA_TYPE.map((item, index) => {
+              {utils.SCHEMA_TYPE.map((item, index) => {
                 return (
                   <Option value={item} key={index}>
                     {item}
