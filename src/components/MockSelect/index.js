@@ -44,7 +44,3 @@ export default class MockSelect extends React.Component {
     );
   }
 }
-
-MockSelect.contextTypes = {
-  Model: PropTypes.object
-};

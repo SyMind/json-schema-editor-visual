@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react'
+import React, { useContext, Component, PureComponent } from 'react'
 import {
   Dropdown,
   Menu,
@@ -16,11 +16,11 @@ import {
 } from 'antd'
 import _ from 'underscore'
 import FieldInput from './FieldInput'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import utils from '../../utils'
 import LocaleProvider from '../LocalProvider'
 import MockSelect from '../MockSelect'
+import EditorContext from '../EditorContext'
 import './schemaJson.css'
 
 const FormItem = Form.Item
@@ -43,10 +43,12 @@ const mapping = (name, data, showEdit, showAdv) => {
 }
 
 class SchemaArray extends PureComponent {
+  static contextType = EditorContext
+
   constructor(props, context) {
     super(props)
     this._tagPaddingLeftStyle = {}
-    this.Model = context.Model.schema
+    this.Model = context
   }
 
   componentWillMount() {
@@ -65,7 +67,7 @@ class SchemaArray extends PureComponent {
   handleChangeType = value => {
     let prefix = this.getPrefix()
     let key = [].concat(prefix, 'type')
-    this.Model.changeTypeAction({ key, value })
+    this.Model.changeType(key, value)
   }
 
   // 修改备注信息
@@ -73,7 +75,7 @@ class SchemaArray extends PureComponent {
     let prefix = this.getPrefix()
     let key = [].concat(prefix, `description`)
     let value = e.target.value
-    this.Model.changeValueAction({ key, value })
+    this.Model.changeValue(key, value)
   }
 
   // 修改mock信息
@@ -81,29 +83,29 @@ class SchemaArray extends PureComponent {
     let prefix = this.getPrefix()
     let key = [].concat(prefix, `mock`)
     let value = e ? { mock: e } : ''
-    this.Model.changeValueAction({ key, value })
+    this.Model.changeValue(key, value)
   }
 
   handleChangeTitle = e =>{
     let prefix = this.getPrefix()
     let key = [].concat(prefix, `title`)
     let value = e.target.value
-    this.Model.changeValueAction({ key, value })
+    this.Model.changeValue(key, value)
   }
 
   // 增加子节点
   handleAddChildField = () => {
     let prefix = this.getPrefix()
     let keyArr = [].concat(prefix, 'properties')
-    this.Model.addChildFieldAction({ key: keyArr })
-    this.Model.setOpenValueAction({ key: keyArr, value: true })
+    this.Model.addChildField(keyArr)
+    this.Model.setOpenValue(keyArr, value)
   }
 
   handleClickIcon = () => {
     let prefix = this.getPrefix()
     // 数据存储在 properties.name.properties下
     let keyArr = [].concat(prefix, 'properties')
-    this.Model.setOpenValueAction({ key: keyArr })
+    this.Model.setOpenValue(keyArr)
   }
 
   handleShowEdit = (name, type) => {
@@ -213,18 +215,14 @@ class SchemaArray extends PureComponent {
   }
 }
 
-SchemaArray.contextTypes = {
-  getOpenValue: PropTypes.func,
-  Model: PropTypes.object,
-  isMock: PropTypes.bool
-}
-
 class SchemaItem extends PureComponent {
+  static contextType = EditorContext
+
   constructor(props, context) {
     super(props)
     this._tagPaddingLeftStyle = {}
     // this.num = 0
-    this.Model = context.Model.schema
+    this.Model = context
   }
 
   componentWillMount() {
@@ -248,7 +246,7 @@ class SchemaItem extends PureComponent {
       return message.error(`The field "${value}" already exists.`)
     }
 
-    this.Model.changeNameAction({ value, prefix, name })
+    this.Model.changeName(value, prefix, name)
   }
 
   // 修改备注信息
@@ -256,7 +254,7 @@ class SchemaItem extends PureComponent {
     let prefix = this.getPrefix()
     let key = [].concat(prefix, 'description')
     let value = e.target.value
-    this.Model.changeValueAction({ key, value })
+    this.Model.changeValue(key, value)
   }
 
   // 修改mock 信息
@@ -264,29 +262,29 @@ class SchemaItem extends PureComponent {
     let prefix = this.getPrefix()
     let key = [].concat(prefix, `mock`)
     let value = e ? { mock: e } : ''
-    this.Model.changeValueAction({ key, value })
+    this.Model.changeValue(key, value)
   }
 
   handleChangeTitle = e => {
     let prefix = this.getPrefix()
     let key = [].concat(prefix, `title`)
     let value = e.target.value
-    this.Model.changeValueAction({ key, value })
+    this.Model.changeValue(key, value)
   }
 
   // 修改数据类型
   handleChangeType = e => {
     let prefix = this.getPrefix()
     let key = [].concat(prefix, 'type')
-    this.Model.changeTypeAction({ key, value: e })
+    this.Model.changeType(key, e)
   }
 
   // 删除节点
   handleDeleteItem = () => {
     const { prefix, name } = this.props
     let nameArray = this.getPrefix()
-    this.Model.deleteItemAction({ key: nameArray })
-    this.Model.enableRequireAction({ prefix, name, required: false })
+    this.Model.deleteItem(nameArray)
+    this.Model.enableRequire(prefix, name, false)
   }
   /*
   展示备注编辑弹窗
@@ -308,7 +306,7 @@ class SchemaItem extends PureComponent {
   //  增加子节点
   handleAddField = () => {
     const { prefix, name } = this.props
-    this.Model.addFieldAction({ prefix, name })
+    this.Model.addField(prefix, name)
   }
 
   // 控制三角形按钮
@@ -316,7 +314,7 @@ class SchemaItem extends PureComponent {
     let prefix = this.getPrefix()
     // 数据存储在 properties.xxx.properties 下
     let keyArr = [].concat(prefix, 'properties')
-    this.Model.setOpenValueAction({ key: keyArr })
+    this.Model.setOpenValue(keyArr)
   }
 
   // 修改是否必须
@@ -324,7 +322,7 @@ class SchemaItem extends PureComponent {
     const { prefix, name } = this.props
     let required = e.target.checked
     // this.enableRequire(this.props.prefix, this.props.name, e.target.checked)
-    this.Model.enableRequireAction({ prefix, name, required })
+    this.Model.enableRequire(prefix, name, required)
   }
 
   render() {
@@ -457,12 +455,6 @@ class SchemaItem extends PureComponent {
   }
 }
 
-SchemaItem.contextTypes = {
-  getOpenValue: PropTypes.func,
-  Model: PropTypes.object,
-  isMock: PropTypes.bool
-}
-
 class SchemaObjectComponent extends Component {
   shouldComponentUpdate(nextProps) {
     if (
@@ -494,25 +486,26 @@ class SchemaObjectComponent extends Component {
   }
 }
 
-const SchemaObject = connect(state => ({
-  open: state.schema.open
-}))(SchemaObjectComponent)
+const SchemaObject = ({...props}) => {
+  const editorContext = useContext(EditorContext)
+  return <SchemaObjectComponent open={editorContext.open} {...props} />
+}
 
-const DropPlus = (props, context) => {
-  const { prefix, name, add } = props
-  const Model = context.Model.schema
+const DropPlus = ({ prefix, name, add }) => {
+  const editorContext = useContext(EditorContext)
+  const Model = editorContext
   const menu = (
     <Menu>
       <Menu.Item>
-        <span onClick={() => Model.addFieldAction({ prefix, name })}>
+        <span onClick={() => Model.addField(prefix, name)}>
           {LocaleProvider('sibling_node')}
         </span>
       </Menu.Item>
       <Menu.Item>
         <span
           onClick={() => {
-            Model.setOpenValueAction({ key: [].concat(prefix, name, 'properties'), value: true })
-            Model.addChildFieldAction({ key: [].concat(prefix, name, 'properties') })
+            Model.setOpenValue([].concat(prefix, name, 'properties'), true)
+            Model.addChildField([].concat(prefix, name, 'properties'))
           }}
         >
           {LocaleProvider('child_node')}
@@ -528,10 +521,6 @@ const DropPlus = (props, context) => {
       </Dropdown>
     </Tooltip>
   )
-}
-
-DropPlus.contextTypes = {
-  Model: PropTypes.object
 }
 
 const SchemaJson = props => {

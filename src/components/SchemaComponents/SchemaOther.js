@@ -17,7 +17,6 @@ import {
   Switch
 } from 'antd'
 import _ from 'underscore'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import AceEditor from '../AceEditor/AceEditor'
 import LocalProvider from '../LocalProvider'
@@ -216,10 +215,6 @@ class SchemaString extends PureComponent {
       </div>
     )
   }
-}
-SchemaString.contextTypes = {
-  changeCustomValue: PropTypes.func,
-  Model: PropTypes.object
 }
 
 class SchemaNumber extends PureComponent {
@@ -420,10 +415,6 @@ class SchemaNumber extends PureComponent {
   }
 }
 
-SchemaNumber.contextTypes = {
-  changeCustomValue: PropTypes.func
-}
-
 const SchemaBoolean = (props, context) => {
   const { data } = props
   let value = _.isUndefined(data.default) ? '' : data.default ? 'true' : 'false'
@@ -454,10 +445,6 @@ const SchemaBoolean = (props, context) => {
       </Row>
     </div>
   )
-}
-
-SchemaBoolean.contextTypes = {
-  changeCustomValue: PropTypes.func
 }
 
 const SchemaArray = (props, context) => {
@@ -517,10 +504,6 @@ const SchemaArray = (props, context) => {
   )
 }
 
-SchemaArray.contextTypes = {
-  changeCustomValue: PropTypes.func
-}
-
 const mapping = data => {
   return {
     string: <SchemaString data={data} />,
@@ -551,10 +534,6 @@ const CustomItem = (props, context) => {
       />
     </div>
   )
-}
-
-CustomItem.contextTypes = {
-  changeCustomValue: PropTypes.func
 }
 
 export default CustomItem

@@ -15,7 +15,7 @@ namespace _utils {
 
   export const SCHEMA_TYPE = ['string', 'number', 'array', 'object', 'boolean', 'integer']
 
-  export const defaultSchema = {
+  export const defaultSchema: Record<string, any> = {
     string: {
       type: 'string'
     },
@@ -66,7 +66,7 @@ namespace _utils {
     delete curState[keys[keys.length - 1]]
   }
 
-  export function getParentKeys(keys: any[]) {
+  export function getParentKeys(keys: string[]): string[] {
     if (keys.length === 1) return []
     let arr = ([] as any[]).concat(keys)
     arr.splice(keys.length - 1, 1)
