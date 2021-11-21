@@ -19,6 +19,7 @@ import {
 import { isUndefined } from 'underscore'
 import PropTypes from 'prop-types'
 import AceEditor from '../AceEditor/AceEditor'
+import EditorContext from '../EditorContext'
 import nls from '../../nls'
 import './schemaJson.css'
 
@@ -31,12 +32,14 @@ const changeOtherValue = (value, name, data, change) => {
 }
 
 class SchemaString extends PureComponent {
+  static contextType = EditorContext
+
   constructor(props, context) {
     super(props)
     this.state = {
       checked: isUndefined(props.data.enum) ? false : true
     }
-    this.format = context.Model.__jsonSchemaFormat
+    this.format = context.__jsonSchemaFormat
   }
 
   componentWillReceiveProps(nextprops) {
@@ -159,7 +162,7 @@ class SchemaString extends PureComponent {
               value={data.enum && data.enum.length && data.enum.join('\n')}
               disabled={!this.state.checked}
               placeholder={nls.localize('enum_msg')}
-              autosize={{ minRows: 2, maxRows: 6 }}
+              autoSize={{ minRows: 2, maxRows: 6 }}
               onChange={e => {
                 this.changeEnumOtherValue(e.target.value, data)
               }}
@@ -176,7 +179,7 @@ class SchemaString extends PureComponent {
                 value={data.enumDesc}
                 disabled={!this.state.checked}
                 placeholder={nls.localize('enum_desc_msg')}
-                autosize={{ minRows: 2, maxRows: 6 }}
+                autoSize={{ minRows: 2, maxRows: 6 }}
                 onChange={e => {
                   this.changeEnumDescOtherValue(e.target.value, data)
                 }}
@@ -385,7 +388,7 @@ class SchemaNumber extends PureComponent {
               value={this.state.enum}
               disabled={!this.state.checked}
               placeholder={nls.localize('enum_msg')}
-              autosize={{ minRows: 2, maxRows: 6 }}
+              autoSize={{ minRows: 2, maxRows: 6 }}
               onChange={e => {
                 this.changeEnumOtherValue(e.target.value, data)
               }}
@@ -402,7 +405,7 @@ class SchemaNumber extends PureComponent {
                 value={data.enumDesc}
                 disabled={!this.state.checked}
                 placeholder={nls.localize('enum_desc_msg')}
-                autosize={{ minRows: 2, maxRows: 6 }}
+                autoSize={{ minRows: 2, maxRows: 6 }}
                 onChange={e => {
                   this.changeEnumDescOtherValue(e.target.value, data)
                 }}
@@ -519,8 +522,7 @@ const handleInputEditor = (e, change) => {
   change(e.jsonData)
 }
 
-const CustomItem = (props, context) => {
-  const { data } = props
+const CustomItem = ({ data }, context) => {
   const optionForm = mapping(JSON.parse(data))
 
   return (

@@ -5,8 +5,10 @@ import utils from '../utils'
 import handleSchema from '../schema'
 
 export interface EditorContextProps {
+    curItemCustomValue: any
     schema: JSONSchema7
     open: Record<string, boolean>
+    __jsonSchemaFormat: any[]
     changeEditorSchema?: Function
     changeName?: Function
     changeValue?: Function
@@ -18,9 +20,11 @@ export interface EditorContextProps {
     addChildField?: Function
     setOpenValue?: Function
     getOpenValue?: Function
+    changeCustomValue?: Function
 }
 
 const EditorContext = createContext<EditorContextProps>({
+    curItemCustomValue: {},
     schema: {
         title: '',
         type: 'object',
@@ -29,7 +33,8 @@ const EditorContext = createContext<EditorContextProps>({
     },
     open: {
         properties: true
-    }
+    },
+    __jsonSchemaFormat: []
 });
 
 export const EditorProvider: FC = ({ children }) => {
@@ -45,6 +50,8 @@ export const EditorProvider: FC = ({ children }) => {
     const [open, setOpen] = useState<Record<string, boolean>>({
         properties: true
     });
+
+    const [curItemCustomValue, setCurItemCustomValue] = useState<any>({});
 
     const changeEditorSchema = useCallback((nextSchema: JSONSchema7): void => {
         handleSchema(nextSchema)
@@ -229,11 +236,13 @@ export const EditorProvider: FC = ({ children }) => {
             status = value
         }
         utils.setData(nextOpen, [path], status)
-    }, [])
+    }, [open])
 
     return (
         <EditorContext.Provider
             value={{
+                curItemCustomValue,
+                __jsonSchemaFormat: [],
                 schema,
                 open,
                 changeEditorSchema,
@@ -246,6 +255,7 @@ export const EditorProvider: FC = ({ children }) => {
                 addField,
                 addChildField,
                 setOpenValue,
+                changeCustomValue: setCurItemCustomValue,
                 getOpenValue: keys => {
                     return utils.getData(open, keys)
                 }

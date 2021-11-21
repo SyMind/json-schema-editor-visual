@@ -30,6 +30,7 @@ const TabPane = Tabs.TabPane
 interface JSONSchemaEditorProps {
     schema: JSONSchema7
     open: Record<string, boolean>
+    curItemCustomValue: any
     data?: string
     onChange?: (data: string) => void
     showEditor?: boolean
@@ -45,7 +46,6 @@ interface JSONSchemaEditorState {
     descriptionKey?: string[]
     advVisible: boolean
     itemKey: string[]
-    curItemCustomValue?: any
     checked: boolean
     editorModalName: string
     mock: string
@@ -67,7 +67,6 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
             descriptionKey: undefined,
             advVisible: false,
             itemKey: [],
-            curItemCustomValue: undefined,
             checked: false,
             editorModalName: '', // 弹窗名称desctiption | mock
             mock: ''
@@ -225,10 +224,11 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
 
   // 高级设置
   handleAdvOk = () => {
+    const { curItemCustomValue } = this.props
     if (this.state.itemKey.length === 0) {
-      this.Model.changeEditorSchema(this.state.curItemCustomValue)
+      this.Model.changeEditorSchema(curItemCustomValue)
     } else {
-      this.Model.changeValue(this.state.itemKey, this.state.curItemCustomValue)
+      this.Model.changeValue(this.state.itemKey, curItemCustomValue)
     }
     this.setState({
       advVisible: false
@@ -240,17 +240,10 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
     })
   }
   showAdv = (key, value) => {
+    this.Model.changeCustomValue(value)
     this.setState({
       advVisible: true,
-      itemKey: key,
-      curItemCustomValue: value // 当前节点的数据信息
-    })
-  }
-
-  //  修改弹窗中的json-schema 值
-  changeCustomValue = newValue => {
-    this.setState({
-      curItemCustomValue: newValue
+      itemKey: key
     })
   }
 
@@ -269,8 +262,7 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
     } = this.state
     const { schema } = this.props
 
-    let disabled =
-      this.props.schema.type === 'object' || this.props.schema.type === 'array' ? false : true
+    let disabled = schema.type !== 'object' && schema.type !== 'array' 
 
     return (
       <div className="json-schema-react-editor">
@@ -338,8 +330,8 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
           <TextArea
             value={this.state[editorModalName]}
             placeholder={nls.localize(editorModalName)}
+            autoSize={{ minRows: 6, maxRows: 10 }}
             onChange={e => this.changeDesc(e.target.value, editorModalName)}
-            autosize={{ minRows: 6, maxRows: 10 }}
           />
         </Modal>
 
@@ -355,7 +347,7 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
             cancelText={nls.localize('cancel')}
             className="json-schema-react-editor-adv-modal"
           >
-            <CustomItem data={JSON.stringify(this.state.curItemCustomValue, null, 2)} />
+            <CustomItem data={JSON.stringify(this.props.curItemCustomValue, null, 2)} />
           </Modal>
         )}
 
@@ -493,6 +485,7 @@ const JSONSchemaEditorConnect: FC<JSONSchemaEditorConnectProps> = ({...props}) =
     return (
         <JSONSchemaEditor
             {...props}
+            curItemCustomValue={editorContext.curItemCustomValue}
             schema={editorContext.schema}
             open={editorContext.open}
             Model={editorContext}
