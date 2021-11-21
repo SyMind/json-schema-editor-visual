@@ -1,8 +1,6 @@
 namespace _utils {
   export const JSONPATH_JOIN_CHAR = '.'
 
-  export const lang = 'en_US'
-
   export const format = [
     { name: 'date-time' },
     { name: 'date' },

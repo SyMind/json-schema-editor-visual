@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, AutoComplete, Icon } from 'antd';
 import PropTypes from 'prop-types';
-import LocaleProvider from '../LocalProvider';
+import nls from '../../nls';
 
 const Option = AutoComplete.Option;
 
@@ -21,7 +21,6 @@ export default class MockSelect extends React.Component {
   };
 
   render() {
-    // const children = [];
     const { schema } = this.props;
     const children = this.mock.map((item) => <Option key={item.mock}>{item.mock}</Option>);
 
@@ -31,7 +30,7 @@ export default class MockSelect extends React.Component {
           className="certain-category-search"
           dropdownMatchSelectWidth={false}
           dataSource={children}
-          placeholder={LocaleProvider('mock')}
+          placeholder={nls.localize('mock')}
           optionLabelProp="value"
           filterOption={true}
           value={schema.mock ? schema.mock.mock : ''}

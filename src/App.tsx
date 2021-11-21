@@ -18,7 +18,7 @@ import SchemaJson from './components/SchemaComponents/SchemaJson'
 import utils from './utils'
 import handleSchema from './schema'
 import CustomItem from './components/SchemaComponents/SchemaOther'
-import LocalProvider from './components/LocalProvider'
+import nls from './nls';
 import MockSelect from './components/MockSelect'
 import EditerContext from './components/EditorContext'
 import './index.css'
@@ -127,7 +127,7 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
   }
 
   alterMsg = () => {
-    // return message.error(LocalProvider('valid_json'))
+    // return message.error(nls.localize('valid_json'))
   }
 
   // AceEditor 中的数据
@@ -275,23 +275,23 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
     return (
       <div className="json-schema-react-editor">
         <Button className="import-json-button" type="primary" onClick={this.showModal}>
-          {LocalProvider('import_json')}
+          {nls.localize('import_json')}
         </Button>
         <Modal
           maskClosable={false}
           visible={visible}
-          title={LocalProvider('import_json')}
+          title={nls.localize('import_json')}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           className="json-schema-react-editor-import-modal"
           okText={'ok'}
-          cancelText={LocalProvider('cancel')}
+          cancelText={nls.localize('cancel')}
           footer={[
             <Button key="back" onClick={this.handleCancel}>
-              {LocalProvider('cancel')}
+              {nls.localize('cancel')}
             </Button>,
             <Button key="submit" type="primary" onClick={this.handleOk}>
-              {LocalProvider('ok')}
+              {nls.localize('ok')}
             </Button>
           ]}
         >
@@ -313,10 +313,10 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
         <Modal
           title={
             <div>
-              {LocalProvider(editorModalName)}
+              {nls.localize(editorModalName)}
               &nbsp;
               {editorModalName === 'mock' && (
-                <Tooltip title={LocalProvider('mockLink')}>
+                <Tooltip title={nls.localize('mockLink')}>
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
@@ -332,12 +332,12 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
           visible={editVisible}
           onOk={() => this.handleEditOk(editorModalName)}
           onCancel={this.handleEditCancel}
-          okText={LocalProvider('ok')}
-          cancelText={LocalProvider('cancel')}
+          okText={nls.localize('ok')}
+          cancelText={nls.localize('cancel')}
         >
           <TextArea
             value={this.state[editorModalName]}
-            placeholder={LocalProvider(editorModalName)}
+            placeholder={nls.localize(editorModalName)}
             onChange={e => this.changeDesc(e.target.value, editorModalName)}
             autosize={{ minRows: 6, maxRows: 10 }}
           />
@@ -345,14 +345,14 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
 
         {advVisible && (
           <Modal
-            title={LocalProvider('adv_setting')}
+            title={nls.localize('adv_setting')}
             maskClosable={false}
             visible={advVisible}
             onOk={this.handleAdvOk}
             onCancel={this.handleAdvCancel}
-            okText={LocalProvider('ok')}
+            okText={nls.localize('ok')}
             width={780}
-            cancelText={LocalProvider('cancel')}
+            cancelText={nls.localize('cancel')}
             className="json-schema-react-editor-adv-modal"
           >
             <CustomItem data={JSON.stringify(this.state.curItemCustomValue, null, 2)} />
@@ -436,7 +436,7 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
                       }
                     />
                   }
-                  placeholder={'Title'}
+                  placeholder={nls.localize('title')}
                   value={this.props.schema.title}
                   onChange={e => this.changeValue(['title'], e.target.value)}
                 />
@@ -451,20 +451,20 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
                       }
                     />
                   }
-                  placeholder={'description'}
+                  placeholder={nls.localize('description')}
                   value={schema.description}
                   onChange={e => this.changeValue(['description'], e.target.value)}
                 />
               </Col>
               <Col span={2} className="col-item col-item-setting">
                 <span className="adv-set" onClick={() => this.showAdv([], this.props.schema)}>
-                  <Tooltip placement="top" title={LocalProvider('adv_setting')}>
+                  <Tooltip placement="top" title={nls.localize('adv_setting')}>
                     <Icon type="setting" />
                   </Tooltip>
                 </span>
                 {schema.type === 'object' ? (
                   <span onClick={() => this.addChildField('properties')}>
-                    <Tooltip placement="top" title={LocalProvider('add_child_node')}>
+                    <Tooltip placement="top" title={nls.localize('add_child_node')}>
                       <Icon type="plus" className="plus" />
                     </Tooltip>
                   </span>

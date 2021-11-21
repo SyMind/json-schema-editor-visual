@@ -18,7 +18,7 @@ import _ from 'underscore'
 import FieldInput from './FieldInput'
 import PropTypes from 'prop-types'
 import utils from '../../utils'
-import LocaleProvider from '../LocalProvider'
+import nls from '../../nls'
 import MockSelect from '../MockSelect'
 import EditorContext from '../EditorContext'
 import './schemaJson.css'
@@ -179,7 +179,7 @@ class SchemaArray extends PureComponent {
             <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-mock">
               <Input
                 addonAfter={<Icon type="edit" onClick={() => this.handleShowEdit('title')} />}
-                placeholder={LocaleProvider('title')}
+                placeholder={nls.localize('title')}
                 value={items.title}
                 onChange={this.handleChangeTitle}
               />
@@ -187,21 +187,21 @@ class SchemaArray extends PureComponent {
             <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-desc">
               <Input
                 addonAfter={<Icon type="edit" onClick={() => this.handleShowEdit('description')} />}
-                placeholder={LocaleProvider('description')}
+                placeholder={nls.localize('description')}
                 value={items.description}
                 onChange={this.handleChangeDesc}
               />
             </Col>
             <Col span={this.context.isMock ? 2: 3} className="col-item col-item-setting">
               <span className="adv-set" onClick={this.handleShowAdv}>
-                <Tooltip placement="top" title={LocaleProvider('adv_setting')}>
+                <Tooltip placement="top" title={nls.localize('adv_setting')}>
                   <Icon type="setting" />
                 </Tooltip>
               </span>
 
               {items.type === 'object' ? (
                 <span onClick={this.handleAddChildField}>
-                  <Tooltip placement="top" title={LocaleProvider('add_child_node')}>
+                  <Tooltip placement="top" title={nls.localize('add_child_node')}>
                     <Icon type="plus" className="plus" />
                   </Tooltip>
                 </span>
@@ -357,7 +357,7 @@ class SchemaItem extends PureComponent {
               <Col span={22}>
                 <FieldInput
                   addonAfter={
-                    <Tooltip placement="top" title={LocaleProvider('required')}>
+                    <Tooltip placement="top" title={nls.localize('required')}>
                       <Checkbox
                         onChange={this.handleEnableRequire}
                         checked={
@@ -397,7 +397,7 @@ class SchemaItem extends PureComponent {
                 addonAfter={
                   <Icon type="edit" onClick={() => this.handleShowEdit('mock', value.type)} />
                 }
-                placeholder={LocaleProvider('mock')}
+                placeholder={nls.localize('mock')}
                 value={value.mock ? value.mock.mock : ''}
                 onChange={this.handleChangeMock}
                 disabled={value.type === 'object' || value.type === 'array'}
@@ -413,7 +413,7 @@ class SchemaItem extends PureComponent {
           <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-mock">
             <Input
               addonAfter={<Icon type="edit" onClick={() => this.handleShowEdit('title')} />}
-              placeholder={LocaleProvider('title')}
+              placeholder={nls.localize('title')}
               value={value.title}
               onChange={this.handleChangeTitle}
             />
@@ -422,7 +422,7 @@ class SchemaItem extends PureComponent {
           <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-desc">
             <Input
               addonAfter={<Icon type="edit" onClick={() => this.handleShowEdit('description')} />}
-              placeholder={LocaleProvider('description')}
+              placeholder={nls.localize('description')}
               value={value.description}
               onChange={this.handleChangeDesc}
             />
@@ -431,7 +431,7 @@ class SchemaItem extends PureComponent {
           
           <Col span={this.context.isMock ? 2: 3}  className="col-item col-item-setting">
             <span className="adv-set" onClick={this.handleShowAdv}>
-              <Tooltip placement="top" title={LocaleProvider('adv_setting')}>
+              <Tooltip placement="top" title={nls.localize('adv_setting')}>
                 <Icon type="setting" />
               </Tooltip>
             </span>
@@ -442,7 +442,7 @@ class SchemaItem extends PureComponent {
               <DropPlus prefix={prefix} name={name} />
             ) : (
               <span onClick={this.handleAddField}>
-                <Tooltip placement="top" title={LocaleProvider('add_sibling_node')}>
+                <Tooltip placement="top" title={nls.localize('add_sibling_node')}>
                   <Icon type="plus" className="plus" />
                 </Tooltip>
               </span>
@@ -498,7 +498,7 @@ const DropPlus = ({ prefix, name, add }) => {
     <Menu>
       <Menu.Item>
         <span onClick={() => Model.addField(prefix, name)}>
-          {LocaleProvider('sibling_node')}
+          {nls.localize('sibling_node')}
         </span>
       </Menu.Item>
       <Menu.Item>
@@ -508,14 +508,14 @@ const DropPlus = ({ prefix, name, add }) => {
             Model.addChildField([].concat(prefix, name, 'properties'))
           }}
         >
-          {LocaleProvider('child_node')}
+          {nls.localize('child_node')}
         </span>
       </Menu.Item>
     </Menu>
   )
 
   return (
-    <Tooltip placement="top" title={LocaleProvider('add_node')}>
+    <Tooltip placement="top" title={nls.localize('add_node')}>
       <Dropdown overlay={menu}>
         <Icon type="plus" className="plus" />
       </Dropdown>

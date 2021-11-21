@@ -1,13 +1,14 @@
-import React from 'react'
-import { render } from 'react-dom'
 import PropTypes from 'prop-types'
 import App from './App'
 import { EditorProvider } from './components/EditorContext';
-import utils from './utils'
-import schema from './models/schema'
+import nls from './nls'
 
-function createJSONSchemaEditor(config = {}) {
-  if(config.lang) utils.lang = config.lang
+interface JSONSchemaEditorConfig {
+  lang?: string
+}
+
+function createJSONSchemaEditor(config: JSONSchemaEditorConfig = {}) {
+  if(config.lang) nls.lang = config.lang
 
   const Component = props => (
     <EditorProvider>
