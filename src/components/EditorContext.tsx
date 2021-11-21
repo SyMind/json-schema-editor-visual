@@ -1,6 +1,6 @@
 import { createContext, useState, useRef, useCallback, FC } from 'react'
 import type { JSONSchema7 } from 'json-schema'
-import _ from 'underscore'
+import { isUndefined } from 'underscore'
 import utils from '../utils'
 import handleSchema from '../schema'
 
@@ -223,7 +223,7 @@ export const EditorProvider: FC = ({ children }) => {
         const path = keys.join(utils.JSONPATH_JOIN_CHAR)
 
         let status
-        if (_.isUndefined(value)) {
+        if (isUndefined(value)) {
             status = utils.getData(nextOpen, [path]) ? false : true
         } else {
             status = value

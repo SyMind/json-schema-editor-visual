@@ -14,7 +14,7 @@ import {
   message,
   Tooltip
 } from 'antd'
-import _ from 'underscore'
+import { isUndefined, isEqual } from 'underscore'
 import FieldInput from './FieldInput'
 import PropTypes from 'prop-types'
 import utils from '../../utils'
@@ -125,7 +125,7 @@ class SchemaArray extends PureComponent {
     let prefixArrayStr = [].concat(prefixArray, 'properties').join(utils.JSONPATH_JOIN_CHAR)
     let showIcon = this.context.getOpenValue([prefixArrayStr])
     return (
-      !_.isUndefined(data.items) && (
+      !isUndefined(data.items) && (
         <div className="array-type">
           <Row className="array-item-type" type="flex" justify="space-around" align="middle">
             <Col
@@ -360,9 +360,7 @@ class SchemaItem extends PureComponent {
                     <Tooltip placement="top" title={nls.localize('required')}>
                       <Checkbox
                         onChange={this.handleEnableRequire}
-                        checked={
-                          _.isUndefined(data.required) ? false : data.required.indexOf(name) != -1
-                        }
+                        checked={isUndefined(data.required) ? false : data.required.indexOf(name) != -1}
                       />
                     </Tooltip>
                   }
@@ -457,14 +455,11 @@ class SchemaItem extends PureComponent {
 
 class SchemaObjectComponent extends Component {
   shouldComponentUpdate(nextProps) {
-    if (
-      _.isEqual(nextProps.data, this.props.data) &&
-      _.isEqual(nextProps.prefix, this.props.prefix) &&
-      _.isEqual(nextProps.open, this.props.open)
-    ) {
-      return false
-    }
-    return true
+    const curProps = this.props
+
+    return !isEqual(nextProps.data, curProps.data) ||
+      !isEqual(nextProps.prefix, curProps.prefix) ||
+      !isEqual(nextProps.open, curProps.open)
   }
 
   render() {

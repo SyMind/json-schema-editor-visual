@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'underscore'
+import { isEqual } from 'underscore'
 import mockEditor from './mockEditor'
 
 const ModeMap = {
@@ -15,7 +15,7 @@ function isNotMatch(a, b) {
   try {
     a = JSON.parse(a)
     b = JSON.parse(b)
-    return !_.isEqual(a, b)
+    return !isEqual(a, b)
   } catch (e) {
     return true
   }

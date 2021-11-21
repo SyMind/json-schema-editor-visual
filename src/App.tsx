@@ -11,7 +11,7 @@ import {
   Modal,
   Tabs
 } from 'antd'
-import _ from 'underscore'
+import { debounce } from 'underscore'
 import type { JSONSchema7 } from 'json-schema'
 import AceEditor from './components/AceEditor/AceEditor'
 import SchemaJson from './components/SchemaComponents/SchemaJson'
@@ -74,7 +74,7 @@ class JSONSchemaEditor extends Component<JSONSchemaEditorProps, JSONSchemaEditor
         }
         this.Model = this.props.Model
 
-        this.alterMsg = _.debounce(this.alterMsg, 2000)
+        this.alterMsg = debounce(this.alterMsg, 2000)
     }
 
   // json 导入弹窗
